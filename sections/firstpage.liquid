@@ -1,0 +1,47 @@
+<div class="swiper-container my-swiper">
+    <!-- Additional required wrapper -->
+   
+        <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+
+      <!-- Slides -->
+      <div class="swiper-slide">
+          <div class="img__wrapper">
+            <img src="{{ block.settings.imageImg  | img_url: 'master'}}" alt="">
+        </div>
+      </div>
+    
+    {% endfor %}
+</div>
+    
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>    <!-- If we need pagination -->
+
+        <div class="swiper-pagination"></div>
+</div>
+
+
+
+
+{% schema %}
+{
+    "name": "image_bg",
+    "settings": [
+    ],
+    "blocks":
+    [
+        {
+            "type":"sdfs",
+            "name":"Image for slider",
+            "settings":[
+            {
+                "type": "image_picker",
+                "id": "imageImg",
+                "label": "img"
+            }
+            ]
+        }
+        
+    ]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+<section class="section">
+    <h2 class="section__h2">{{ section.settings.sectionTitle }}</h2>
+    <div class="section__wrapper {% if section.settings.revert %} section__wrapper_revert {% endif %}">
+       {% render 'blocks', blocks: section.blocks %}
+    </div>
+</section>
+
+{% schema %}
+{
+    "name": "Setting column",
+    "settings": [
+    {
+        "type": "checkbox",
+        "id": "revert",
+        "label": "Revert block",
+        "default": false
+    },
+    {
+        "type": "text",
+        "id": "sectionTitle",
+        "label": "Section title"
+    }
+    ],
+    "blocks":
+    [
+        {
+            "type":"Text_columns_with_image",
+            "name":"Block",
+            "settings":[
+            {
+                "type": "image_picker",
+                "id": "imageBlock",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "textarea",
+                "id": "descr",
+                "label": "Description"
+            },
+            {
+                "type": "checkbox",
+                "id": "textPosition",
+                "label": "Text position left",
+                "default": true
+            }
+
+            ]
+        }
+        
+    ]
+}
+{% endschema %}

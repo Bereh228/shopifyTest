@@ -1,0 +1,71 @@
+<style>
+    .subheader{
+        background-color: {{ section.settings.backgroundColor }};
+        margin-top: -55px;
+    }
+    .subheader__text{
+        color: {{ section.settings.colorSubheader }};
+    }
+    .subheader__descr{
+        color: {{ section.settings.colorSubheader }};
+    }
+</style>
+
+<div class="subheader">
+    <div class="subheader__wrapper">
+        <div class="subheader__logo">
+            <img src="{{ section.settings.subheaderImage | img_url: 'master' }}" alt="{{ section.settings.altImg }}">
+        </div>
+        <div class="subheader__text"> {{ section.settings.textSubheader }} </div>
+        <div class="subheader__descr">{{ section.settings.descrSubheader }}</div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Settings subheader",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "subheaderImage",
+            "label": "Image subheader"
+        },
+        {
+            "type": "text",
+            "id": "algImg",
+            "label": "Alt for img",
+            "default": "Alt for img",
+            "info": "Alt for img",
+            "placeholder": "Alt for img"
+        },
+        {
+            "type": "text",
+            "id": "textSubheader",
+            "label": "Text subheader",
+            "default": "Default subheader text",
+            "info": "You can change text subheader",
+            "placeholder": "Some text"
+        },
+        {
+            "type": "text",
+            "id": "descrSubheader",
+            "label": "Description subheader",
+            "default": "Default description subheader",
+            "info": "You can change decriotion subheader",
+            "placeholder": "Some description"
+        },
+        {
+            "type": "color",
+            "id": "colorSubheader",
+            "label": "Color text",
+            "default": "#000",
+            "info": "You can change color text subheader"
+        },
+        {
+            "type": "color",
+            "id": "backgroundColor",
+            "label": "Background color"
+        }
+    ]
+}
+{% endschema %}

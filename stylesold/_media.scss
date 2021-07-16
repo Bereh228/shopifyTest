@@ -1,0 +1,205 @@
+@media (max-width: 1400px){
+    .container{
+        width: 1180px;
+    }
+}
+@media(max-width: 1199px){
+    .container{
+        width: 960px;
+    }
+    .header{
+        &__nav{
+            a{
+                margin: 0 5px;
+            }
+        }
+    }
+}
+@media (max-width: 991px){
+    .container{
+        width: 720px;
+    }
+    .main{
+        &__wrapper{
+            margin: 50px auto 154px auto;
+            width: auto;
+        }
+        &__text,
+        &__subheader{
+            font-size: 60px;
+        }
+    }
+    .header{
+        .icon{
+            margin-right: 15px;
+        }
+        &__icons-circle{
+            right: 7px;
+        }
+    }
+}
+
+@media (max-width: 768px){
+    .header{
+        &__icons-circle{
+            right: 8px;
+        }
+    }
+}
+@media (max-width: 425px){
+    .container{
+        width: 400px;
+    }
+    .header__hamburger{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            position: absolute;
+            right: 11px;
+            top: 30px;
+            width: 30px;
+            z-index: 12;
+            .hamburger__item{
+                height: 2px;
+                margin-bottom: 3px;
+                background-color: $white;
+                border-radius: 5px;
+            }
+            .hamburger__item:nth-child(1){
+                width: 100%;
+            }
+            .hamburger__item:nth-child(2){
+                width: 80%;
+            }
+            .hamburger__item:nth-child(3){
+                width: 60%;
+            } 
+        }
+    .header{
+        &__wrapper{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        &__nav{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            height: 100vh;
+            background: rgba($color: $black, $alpha: 0.9);
+            transform: translateX(100%);
+            transition: .3s transform ease-in;
+            z-index: 12;
+            &_active{
+                transform: translateX(0);
+            }
+            a{
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
+        &__icons{
+            margin-right: 25px;
+            &-circle{
+                right: 6px;
+            }
+        }
+
+    }
+    .main{
+        &__descr{
+            width: 380px;
+        }
+        &__subheader{
+            margin-bottom: 30px;
+        }
+        .button-main{
+            font-size: 13px;
+        }
+    }
+    .header__hamburger_active{
+        transform: scale(0.9);
+        .hamburger__item:nth-child(1){
+            transform: rotate(50deg) translateY(5px);
+        }
+        .hamburger__item:nth-child(2){
+            display: none;
+        }
+        .hamburger__item:nth-child(3){
+            width: 97%;
+            transform: rotate(-48deg) translateY(-4px) translateX(-1px);
+        }
+    }
+
+    .main{
+        &__wrapper{
+            margin: 76px auto;
+        }
+        &__amazon-link{
+            width: 100px;
+            height: 18px;
+            img{
+                object-fit: contain;
+            }
+        }
+        &__text,
+        &__subheader{
+            font-size: 35px;
+        }
+        &__descr{
+            font-size: 15px;
+        }
+    }
+}
+
+@media (max-width:375px){
+    .container{
+        width: 350px;
+    }
+    .header{
+        &__icons{
+            margin-right: 30px;
+        }
+    }
+    .main{
+        &__text,
+        &__subheader{
+            font-size: 30px;
+        }
+        &__descr{
+            width: 330px;
+        }
+    }
+}
+@media (max-width: 320px){
+    .header{
+        &__logo{
+            width: 154px;
+            height: 36px;
+        }
+    }
+    .container{
+        width: 300px;
+    }
+    .main{
+        &__text,
+        &__subheader{
+            font-size: 27px;
+        }
+        &__descr{
+            width: 300px;
+            line-height: 1.3;
+            font-size: 15px;
+        }
+        &__learn{
+            transform: translateX(7px);
+        }
+        &__amazon-link{
+            width: 85px;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{% for block in blocks %}
+            <div class="section__item">
+                <div class="section__img">
+                    <img src="{{ block.settings.imageBlock | img_url: 'master'}}" alt="">
+                </div>
+                <div class="section__title {% if block.settings.textPosition==false %} section__title_right {% endif %}">{{ block.settings.title }}</div>
+                <div class="section__descr {% if block.settings.textPosition==false %} section__descr_right{% endif %} ">{{ block.settings.descr }}</div>
+            </div>
+{% endfor %}

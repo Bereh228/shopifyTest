@@ -1,0 +1,249 @@
+<header class="header">
+    <div class="container">
+        <div class="header__before">
+            <div class="header__before-wrapper">
+                <div class="header__before-text">{{ section.settings.header_before_text }}
+                </div>
+            </div>
+        </div>
+        <div class="header__wrapper">
+            <!-- absolute -->
+            <div class="header__line"></div>
+            <div class="header__left">
+                <div class="header__logo">
+                    <a href="{{ section.settings.main_url }}">
+                        <img src="{{ section.settings.header_logo | img_url: 'master'}}" alt="">
+                    </a>
+                </div>
+                <nav class="header__nav">
+                    {% for link in linklists[section.settings.header_nav].links %}
+                        <a class="header__nav-link" href="{{ link.url }}">{{ link.title }}
+                            {% if link.title =='About us' %}
+                            <i class="fas fa-chevron-up arrow-up-about"></i>
+                            {% endif %}
+                            {% if link.title == 'Blog' %}
+                            <i class="fas fa-chevron-up arrow-up-blog"></i>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                    <i class="fas fa-chevron-up arrow-up"></i>
+                    <div class="header__nav-exit">&times;</div>
+                    <div class="header__triangle"></div>
+                    <div class="header__triangle-about"></div>
+                </nav>
+            </div>
+            <div class="header__right">
+                <div class="header__right-icons">
+                    <i class="fas fa-search"></i>
+                    <i class="far fa-user"></i>
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+            <div class="header__hamburger">
+                <div class="hamburger__item"></div>
+                <div class="hamburger__item"></div>
+                <div class="hamburger__item"></div>
+            </div>
+        </div>
+        <!-- blocks -->
+        <div class="header__mega">
+            <div class="container">
+                <div class="header__mega-wrapper">
+
+                    {% for block in section.blocks %}
+                    {% if block.type == 'text' %}
+                    <div class="header__mega-item">
+                        <div class="header__mega-item__wrapper">
+                            <div class="header__mega-item__title">
+                                {{ block.settings.block_title }}
+                                {% if block.settings.block_link_menu != blank %}
+                                    <div class="header__mega-item-arrow">></div>   
+                                {% endif %}
+                            </div>
+                            <div class="header__mega-item__descr">
+                                <div class="header__mega-item__img">
+                                    <img src="{{ block.settings.block_image | img_url: 'master' }}" alt="">
+                                </div>
+                                <div class="header__mega-item__links">
+                                {% for link in linklists[block.settings.block_link_menu].links %}
+                                    <a class="mega-link" href="{{ link.url }}">{{ link.title }}</a>
+                                {% endfor %}
+                                </div>
+                                <div class="header__mega-item__exit">&times;</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                        
+                        
+                    {% endfor %}
+                    <div class="header__nav-exit__mega">&times;</div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="header__about-mega">
+            <div class="container">
+                <div class="header__about-mega__wrapper">
+                    <div class="header__about-mega__left">
+                        <div class="header__about-mega__left-wrapper">
+                            {% for block in section.blocks %}
+                            {% if block.type == 'menu_header2' %}
+    
+                                <div class="header__about-mega__left-item">
+                                    <div class="header__about-mega__left-title">{{ block.settings.mega_title }}</div>
+                                    <div class="header__about-mega__left-list">
+                                        {% for link in linklists[block.settings.mega_link_list].links %}
+                                        <a class="mega-link" href="{{ link.url }}">{{ link.title }}</a>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+    
+                            {% endif %}
+                                
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="header__about-mega__right">
+                        <div class="header__about-mega__right-img">
+                            <img src="{{ section.settings.image_header_mega2 | img_url: 'master' }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header__article">
+            <div class="container">
+                <div class="header__article-wrapper">
+
+                    {% for link in linklists[section.settings.link_list_article].links %}
+                    {% assign URL = link.url | remove: '/blogs/' %}
+                        <div class="header__article-item">
+                            <div class="header__article-item__wrapper">
+                                <div class="header__article-item__img">
+                                    <a href="{{ articles[URL].url }}">
+                                        <img src="{{ articles[URL].image.src | img_url: 'master' }}" alt="">
+                                    </a>
+                                </div>
+                                <div class="header__article-item__content">
+                                    <div class="header__article-item__title">
+                                        {{ articles[URL].title | link_to: articles[URL].url }}
+                                    </div>
+                                    <div class="header__article-item__tags">
+                                        {% for tag in articles[URL].tags %}
+                                            <div class="header__articles-item__tag">
+                                                #{{ tag }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="header__article-item__content">
+                                        {{ articles[URL].content }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+    
+                </div>
+            </div>
+            
+<!-- 
+            {% for link in linklists[section.settings.link_list_article].links %}
+                <div>{{ articles[URL].title | link_to: articles[URL].url }}</div>
+                <div>{{ articles[URL].content }}</div>
+                <div>
+
+                    <a href="{{ articles[URL].url }}">
+                        <img src="{{ articles[URL].image.src | img_url: 'master' }}" alt="">
+                    </a>
+                </div>
+                <br>
+            {% endfor %} -->
+        </div>
+        
+    </div>
+</header>
+
+{% schema %}
+{
+    "name": "header",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "header_logo",
+            "label": "Header logo"
+        },
+        {
+            "type": "link_list",
+            "id": "header_nav",
+            "label": "Header nav menu"
+        },
+        {
+            "type": "text",
+            "id": "main_url",
+            "label": "Url to main page"
+        },
+        {
+            "type": "text",
+            "id": "header_before_text",
+            "label": "Text in header before"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_media",
+            "label": "Image for menu 375px"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_header_mega2",
+            "label": "Image for mega header 2"
+        },
+        {
+            "type": "link_list",
+            "id": "link_list_article",
+            "label": "Link list article"
+        }
+    ],
+    "blocks":
+    [
+        {
+            "type":"text",
+            "name":"Block menu",
+            "settings":[
+            {
+                "type": "text",
+                "id": "block_title",
+                "label": "Block title"
+            },
+            {
+                "type": "image_picker",
+                "id": "block_image",
+                "label": "Block image"
+            },
+            {
+                "type": "link_list",
+                "id": "block_link_menu",
+                "label": "Block link menu"
+            }
+            ]
+        },
+        {
+            "type": "menu_header2",
+            "name": "Block menu 2",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "mega_title",
+                    "label": "Title text"
+                },
+                {
+                    "type": "link_list",
+                    "id": "mega_link_list",
+                    "label": "Link list"
+                }
+            ]
+        }
+        
+    ]
+}
+{% endschema %}

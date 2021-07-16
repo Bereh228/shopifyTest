@@ -1,0 +1,106 @@
+<style>
+    .button-main{
+        background-color: {{ section.settings.button_color }};
+    }
+    .main{
+        background: url('{{ section.settings.main_bg | img_url: 'master' }}') center center/cover no-repeat;
+    }
+</style>
+
+<main class="main">
+    <div class="container">
+        <div class="main__wrapper">
+           <div class="main__text">{{ section.settings.main_header }}</div>
+            <div class="main__subheader">{{ section.settings.main_subheader }}</div>
+            <div class="main__descr">{{ section.settings.main_descr }}</div>
+            <button class="button button-main">{{ section.settings.button_text }}</button>
+        </div>
+       <div class="wrapper-bottom">
+        <div class="main__bottom">
+            <div class="main__social">
+                <div class="main-img">
+                    <img src="{{ section.settings.social_f | img_url: 'master' }}" alt="">
+                </div>
+                <div class="main-img">
+                    <img src="{{ section.settings.social_s | img_url: 'master' }}" alt="">
+                </div>
+            </div>
+            <div class="main__learn">
+                <div class="main__learn-text">{{ section.settings.main_bottom_text }}</div>
+                <div class="main__learn-img">
+                    <a href=""><img src="{{ section.settings.main_bottom_img | img_url: 'master' }}" alt=""></a>
+                </div>
+            </div>
+            <div href="" class="main__amazon">
+                <a href="" class="main__amazon-link">
+                    <img src="{{ section.settings.main_amazon | img_url: 'master' }}" alt="">
+                </a>
+            </div>
+        </div>
+       </div>
+    </div>
+
+</main>
+
+{% schema %}
+{
+    "name": "SettingMain",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "main_bg",
+            "label": "Background main block"
+        },
+        {
+            "type": "text",
+            "id": "main_header",
+            "label": "Main header text"
+        },
+        {
+            "type": "text",
+            "id": "main_subheader",
+            "label": "Main subheader text"
+        },
+        {
+            "type": "textarea",
+            "id": "main_descr",
+            "label": "Main description"
+        },
+        {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button text"
+        },
+        {
+            "type": "color",
+            "id": "button_color",
+            "label": "Background color button"
+        },
+        {
+            "type": "image_picker",
+            "id": "social_f",
+            "label": "Social image first"
+        },
+        {
+            "type": "image_picker",
+            "id": "social_s",
+            "label": "Social image second"
+        },
+        {
+            "type": "text",
+            "id": "main_bottom_text",
+            "label": "Main bottom text"
+        },
+        {
+            "type": "image_picker",
+            "id": "main_bottom_img",
+            "label": "Main bottom img"
+        },
+        {
+            "type": "image_picker",
+            "id": "main_amazon",
+            "label": "Picture amazon"
+        }
+    ]
+}
+{% endschema %}

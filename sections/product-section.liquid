@@ -1,0 +1,63 @@
+<section class="goods">
+    <div class="container">
+        <div class="goods__wrapper">
+            <div class="goods__media">
+
+                <div class="swiper-container swiper-cont">
+                    <div class="swiper-wrapper">
+                        {% for media in product.media %}
+                        {% case media.media_type %}
+                        <p>{{ media.media_type }}</p>
+                            {% when 'image' %}
+                            <div class="swiper-slide">
+                                <div class="swiper__img">
+                                    <img src="{{ media | img_url: 'master'}}" alt="{{ media.alt }}" class="imgSliderGoods">
+                                </div>
+                            </div>
+                            {% when 'external_video' %}
+                            <div class="product-single__media swiper-slide">
+                                {{ media | external_video_tag }}
+                            </div>
+                            {% when 'video' %}
+                            <div class="product-single__video swiper-slide">
+                                {{ media | video_tag: controls: true }}
+                            </div>
+                            {% when 'model' %}
+                            <div class="product-single__media swiper-slide">
+                                {{ media | model_viewer_tag }}
+                            </div>
+                            {% else %}
+                            <div class="product-single__media swiper-slide">
+                                {{ media | media_tag }}
+                            </div>
+                        {% endcase %}
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+
+            </div>
+            <div class="goods__descr">
+                <div class="goods__descr-wrapper">
+                    <div class="goods__title-type">
+                        <div class="goods__title">{{ product.title }}</div>
+                        <div class="goods__type">Type: <span>{{ product.type }}</span></div>
+                    </div>
+                    <div class="goods__price-compare">
+                        <div class="goods__price">{{ product.price | money }}</div>
+                        <div class="goods__compare">{{ product.compare_at_price | money }}</div>
+                    </div>
+                    <div class="goods__descr-item">{{ product.content }}</div>
+                    <div class="goods__weight">Weight: {{ product.variants.first.weight | weight_with_unit }}</div>
+                    <div class="goods__tags">
+                        {% for tag in product.tags %}
+                            <div class="goods__tag">#{{tag}}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

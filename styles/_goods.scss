@@ -1,0 +1,95 @@
+.goods{
+    &__wrapper{
+        display: grid;
+        grid-template: minmax(500px,1fr) / 1fr 1fr;
+    }
+    &__descr{
+        padding-left: 20px;
+        &-wrapper{
+            display: flex;
+            flex-direction: column;
+            div{
+                line-height: 1;
+            }
+        }
+    }
+    // media
+    &__media{
+       
+    }
+    // title
+    &__title{
+        text-transform: uppercase;
+        font-size: 50px;
+        font-weight: bold;
+        color: $black;
+        line-height: 1;
+    }
+    // type
+    &__title-type{
+        margin-bottom: 5px;
+    }
+    &__type{
+        span{
+            text-transform: lowercase;
+        }
+    }
+    // price
+    &__price-compare{
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: 20px;
+        .goods__price{
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .goods__compare{
+            text-decoration: line-through;
+            font-size: 14px;
+            color: $color_link;
+        }
+    }
+    // descr
+    &__descr-item{
+        margin-bottom: 10px;
+    }
+    // weight
+    &__weight{
+        margin-bottom: 5px;
+    }
+    // tags
+    &__tags{
+        display: flex;
+    }
+    &__tag{
+        margin-right: 5px;
+        text-transform: lowercase;
+        color: $color_link;
+    }
+
+}
+
+.swiper-cont{
+    height: 500px;
+    width: 600px;
+    .swiper__img{
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+        img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+    .swiper-button-next,
+    .swiper-button-prev{
+        color: $black;
+    }
+}
+
+.customSquare{
+    border: none!important;
+}
