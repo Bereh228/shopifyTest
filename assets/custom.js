@@ -172,16 +172,20 @@ new Swiper('.swiper-cont', {
 });
 
 // zoom picture
-$(document).ready(function () {
-    // $('.imgSliderGoods').blowup();
-    $('.imgSliderGoods').each(function (index) {
-        $(this).blowup({
-            "background": "transparent",
-            "width": 400,
-            "height": 500,
-            "round": false,
-            "scale": 0.35,
-            "customClasses": "customSquare"
-        });
-    });
+// $(document).ready(function () {
+//     $('.imgSliderGoods').each(function(){
+//         $(this).blowup({
+//             "background": "transparent",
+//             "width": 400,
+//             "height": 500,
+//             "round": false,
+//             "scale": 0.35,
+//             "customClasses": "customSquare"
+//         });
+//     });
+// })
+
+
+$('.swiper__img').zoom({
+    magnify: 0.5
 });

@@ -190,7 +190,6 @@
 
   {{ content_for_header }}
     <!-- My style -->
-    <link rel="stylesheet" href="{{ 'zoomio.css' | asset_url }}" as="style">
     <link rel="stylesheet" href="{{ 'custom.css' | asset_url }}" as="style">
 </head>
 
@@ -234,8 +233,8 @@
 <!-- JS scripts -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-{{ 'zoomio.js' | asset_url | script_tag }}
 {{ 'blowup.js' | asset_url | script_tag }}
+{{ 'jquery.zoom.js' | asset_url | script_tag }}
 {{ 'custom.js' | asset_url | script_tag }}
 
 </body>
