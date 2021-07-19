@@ -12,6 +12,9 @@ body{
     @include media(375px){
         width: 350px;
     }
+    @include media(320px){
+        width: 300px;
+    }
 }
 .main-content{
     padding-top: 158px;

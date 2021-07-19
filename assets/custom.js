@@ -186,6 +186,4 @@ new Swiper('.swiper-cont', {
 // })
 
 
-$('.swiper__img').zoom({
-    magnify: 0.5
-});
+$('.swiper__img').zoom();
