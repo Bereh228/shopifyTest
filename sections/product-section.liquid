@@ -35,6 +35,7 @@
                     </div>
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
                 </div>
 
             </div>
@@ -50,11 +51,12 @@
                     </div>
                     <div class="goods__descr-item">{{ product.content }}</div>
                     <div class="goods__weight">Weight: {{ product.variants.first.weight | weight_with_unit }}</div>
-                    <div class="goods__tags">
-                        {% for tag in product.tags %}
-                            <div class="goods__tag">#{{tag}}</div>
+
+                    <div>{% assign product_quantity = 0 %}
+                        {% for variant in product.variants %}
+                        {% assign product_quantity = product_quantity | plus: variant.inventory_quantity %}
                         {% endfor %}
-                    </div>
+                        Number of available units : {{ product_quantity }}</div>
                 </div>
             </div>
         </div>

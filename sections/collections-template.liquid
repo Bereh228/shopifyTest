@@ -1,0 +1,152 @@
+<!-- SELECT CATEGORIES -->
+  {% for product in collection.products %}
+    {% for tag in product.tags %}
+      {% assign category = tag | remove: 'category_' | split: ':' %} 
+      {% assign categories = categories | append: category[0] | append: ',' %}
+      {% assign categoriesArray = categories | split: ',' | uniq | join: ',' | split: ',' %}
+    {% endfor %}
+  {% endfor %}
+
+<!-- PROPERTIES CATEGORIES -->
+  {% for product in collection.products %}
+    {% for tag in product.tags %}
+        {% assign localTag = tag | remove: 'category_' %}
+        {% for item in categoriesArray %}
+          {% if localTag contains item %}
+            {% assign localTagWO_category = localTag | remove: item %}
+            {% assign subCategories = subCategories | append: localTagWO_category %}
+          {% endif %}
+        {% endfor %}
+    {% endfor %}
+  {% endfor %}
+
+
+{% assign subcategoriesArray = subCategories | split: ':' | uniq %}
+
+<!-- UNIQ TAGS -->
+  {% for product in collection.products %}
+    {% for tag in product.tags %}
+      {% assign tagLocal = tagLocal | append: tag | append: ',' %}
+      {% assign tagArray = tagLocal | split: ',' | uniq %}
+    {% endfor %}
+  {% endfor %}
+
+<!-- Tags = tagArray -->
+<!-- Categories = categoriesArray-->
+<!-- Subcategories = subcategoriesArray-->
+
+
+<div class="collection">
+  <div class="container">
+    <div class="collection__header">
+      <!-- Flex -->
+      <div class="collection__header-wrapper">
+        <div class="collection__header-left">
+          <div class="collection__filter">
+            <div class="collection__filter-text">{{ section.settings.filter_text }}</div>
+            <div class="collection__filter-image">
+              <img src="{{ section.settings.filter_image | img_url: 'master'}}" alt="">
+            </div>
+          </div>
+          <div class="collection__list">
+            <div class="collection__list-item collection__list-item-all">
+              <a href="{{ shop.url}}/collections/all/">All products</a>
+            </div>
+            {% for collection in collections %}
+              <div class="collection__list-item">{{ collection.title }}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="collection__wrapper">
+        {% for product in collection.products %}
+          <div class="collection__item">
+            <!-- Flex -->
+            <div class="collection__item-wrapper">
+              <div class="item__img">
+                <a href="{{ product.url }}">
+                  <img src="{{ product.images[0].src | img_url: 'master'}}" alt="">
+                </a>
+              </div>
+              <div class="item__wrapper-title-price">
+                <div class="item__title">{{ product.title | link_to: product.url }}</div>
+                <div class="item__price">{{ product.price | money }}</div>
+              </div>
+              <div class="item__weight">{{ product.variants.first.weight | weight_with_unit }}</div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+  </div>
+  
+  <div class="filter__block">
+   <div class="filter__block-wrapper">
+    <div class="filter__header">
+      <div class="filter__header-wrapper">
+          <div class="filter__header-arrow"><img src="{{ section.settings.arrow_left | img_url: 'master'}}" alt=""></div>
+          <div class="filter__header-title">Refine By</div>
+          <div class="filter__header-exit">&times;</div>
+      </div>
+    </div>
+    <div class="filter__content">
+     {% for category in categoriesArray %}
+       <div class="category">
+         <div class="category__header">
+          <div class="category__header-wrapper">
+            <div class="category__text">{{ category | upcase }}</div>
+            <div class="category__status">+</div>
+          </div>
+         </div>
+         <div class="category__subcategories">
+          {% for tag in tagArray %}
+          {% assign i = 0 %}
+          {% for subCategory in subcategoriesArray %}
+            {% if i == 0 %}
+              {% assign i = 1 %}
+              {% continue %}
+            {% endif %}
+              {% if i == 1 %}
+                {% if tag contains subCategory and tag contains category%}
+                <div class="category__subcategories-item">
+                  <input type="radio" name="{{ category }}" id="{{ subCategory | capitalize}}">
+                  <label data-filter="/collections/{{collection.handle}}/{{tag}}" for="{{ subCategory | capitalize}}" class="label-item">{{ subCategory | capitalize}}</label>
+                </div>
+                {% endif %}
+              {% endif %}
+
+            {% endfor %}
+          {% endfor %}
+            
+         </div>
+       </div>
+     {% endfor %}
+    </div>
+   </div>
+  </div>
+
+</div>
+
+
+{% schema %}
+{
+  "name": "Settings",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "filter_image",
+      "label": "Filter image"
+    },
+    {
+      "type": "text",
+      "id": "filter_text",
+      "label": "Filter text"
+    },
+    {
+      "type": "image_picker",
+      "id": "arrow_left",
+      "label": "Arrow left"
+    }
+  ]
+}
+{% endschema %}

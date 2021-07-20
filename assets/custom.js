@@ -160,30 +160,79 @@ exits.forEach(function (item) {
     });
 });
 
-// Products
+// Product's swiper
 new Swiper('.swiper-cont', {
     navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev'
     },
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true,
+        dynamicBullets: true
+    },
     speed: 600,
     slidesPerView: 1,
-    slidesPerGroup: 1
+    slidesPerGroup: 1,
+    allowTouchMove: false
+});
+// Product's zoom
+$('.swiper__img').zoom();
+
+// collection
+
+var showFilters = document.querySelector('.collection__filter');
+var hideFilters = document.querySelector('.filter__header-exit');
+
+// show Filters
+showFilters.addEventListener('click', function () {
+    $('.filter__block').fadeIn('fast');
+    setTimeout(function () {
+        $('.filter__block-wrapper').addClass('filter__block-wrapper_active');
+    }, 300);
+});
+// hide Filters
+hideFilters.addEventListener('click', function () {
+    $('.filter__block-wrapper').removeClass('filter__block-wrapper_active');
+
+    setTimeout(function () {
+        $('.filter__block').fadeOut('fast');
+    }, 600);
 });
 
-// zoom picture
-// $(document).ready(function () {
-//     $('.imgSliderGoods').each(function(){
-//         $(this).blowup({
-//             "background": "transparent",
-//             "width": 400,
-//             "height": 500,
-//             "round": false,
-//             "scale": 0.35,
-//             "customClasses": "customSquare"
-//         });
-//     });
-// })
+// show subCategories
+document.querySelector('.filter__content').addEventListener('click', function (event) {
+    if (event.target.classList.contains('category__header-wrapper')) {
+        event.target.parentElement.nextElementSibling.classList.toggle('category__subcategories_active');
+        if (event.target.firstElementChild.nextElementSibling.innerHTML === '+') {
+            event.target.firstElementChild.nextElementSibling.innerHTML = '-';
+        } else {
+            event.target.firstElementChild.nextElementSibling.innerHTML = '+';
+        }
+    }
+});
 
+var labelItems = document.querySelectorAll('.label-item');
 
-$('.swiper__img').zoom();
+labelItems.forEach(function (item) {
+    item.addEventListener('click', function () {
+        reloadContenturl(item.dataset.filter);
+    });
+});
+
+// reloadContent
+function reloadContenturl(url) {
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: {},
+        complete: function complete(data) {
+            $('.collection__wrapper').html($('.collection__wrapper', data.responseText).html());
+            history.pushState({
+                page: url
+            }, url, url);
+        }
+        // check history pages -> if has some url => add new url and search
+    });
+}

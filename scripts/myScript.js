@@ -159,31 +159,81 @@ exits.forEach(item => {
 });
 
 
-// Products
+// Product's swiper
 new Swiper('.swiper-cont',{
     navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
     },
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true,
+        dynamicBullets: true,
+    },
     speed: 600,
     slidesPerView: 1,
     slidesPerGroup: 1,
+    allowTouchMove: false,
 });
-
-// zoom picture
-// $(document).ready(function () {
-//     $('.imgSliderGoods').each(function(){
-//         $(this).blowup({
-//             "background": "transparent",
-//             "width": 400,
-//             "height": 500,
-//             "round": false,
-//             "scale": 0.35,
-//             "customClasses": "customSquare"
-//         });
-//     });
-// })
-
-
+// Product's zoom
 $('.swiper__img').zoom();
 
+// collection
+
+const showFilters = document.querySelector('.collection__filter');
+const hideFilters = document.querySelector('.filter__header-exit');
+
+// show Filters
+showFilters.addEventListener('click',()=>{
+    $('.filter__block').fadeIn('fast');
+    setTimeout(() => {
+        $('.filter__block-wrapper').addClass('filter__block-wrapper_active');
+    }, 300);
+})
+// hide Filters
+hideFilters.addEventListener('click',()=>{
+    $('.filter__block-wrapper').removeClass('filter__block-wrapper_active');
+
+    setTimeout(()=>{
+         $('.filter__block').fadeOut('fast');
+    },600)
+})
+
+
+// show subCategories
+document.querySelector('.filter__content').addEventListener('click',function(event){
+    if(event.target.classList.contains('category__header-wrapper')){
+        event.target.parentElement.nextElementSibling.classList.toggle('category__subcategories_active');
+        if(event.target.firstElementChild.nextElementSibling.innerHTML === '+'){
+            event.target.firstElementChild.nextElementSibling.innerHTML = '-';
+        }
+        else{
+            event.target.firstElementChild.nextElementSibling.innerHTML = '+';
+        }
+    }
+})
+
+const labelItems = document.querySelectorAll('.label-item');
+
+labelItems.forEach(item => {
+    item.addEventListener('click', () => {
+        reloadContenturl(item.dataset.filter)
+    });
+});
+
+// reloadContent
+function reloadContenturl(url){
+    $.ajax({
+        type: 'GET',
+        url: url, 
+        data: {},
+        complete: function(data) {
+            $('.collection__wrapper').html( $('.collection__wrapper', data.responseText).html());
+            history.pushState({
+                page: url
+            },url,url)
+        },
+        // check history pages -> if has some url => add new url and search
+    });
+}
