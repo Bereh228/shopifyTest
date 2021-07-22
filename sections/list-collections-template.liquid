@@ -1,0 +1,10 @@
+<h1>here must be all collections</h1>
+<div>
+    <a href="collections/all"> all collections</a>
+</div>
+{% for collection in collections %}
+    <a href="{{ collection.url }}">
+        <img src="{{ collection.image | img_url: 'master' }}" alt="">
+    </a>
+    <div>{{ collection.title | link_to: collection.url }}</div>
+{% endfor %}

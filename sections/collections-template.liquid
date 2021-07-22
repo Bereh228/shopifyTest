@@ -20,7 +20,6 @@
     {% endfor %}
   {% endfor %}
 
-
 {% assign subcategoriesArray = subCategories | split: ':' | uniq %}
 
 <!-- UNIQ TAGS -->
@@ -36,6 +35,7 @@
 <!-- Subcategories = subcategoriesArray-->
 
 
+
 <div class="collection">
   <div class="container">
     <div class="collection__header">
@@ -49,17 +49,26 @@
             </div>
           </div>
           <div class="collection__list">
-            <div class="collection__list-item collection__list-item-all">
-              <a href="{{ shop.url}}/collections/all/">All products</a>
-            </div>
+              <button class="collection__list-item collection__list-item-all" data-handle="/collections/all" data-hname="/all/">All products</button>
             {% for collection in collections %}
-              <div class="collection__list-item">{{ collection.title }}</div>
+              <button class="collection__list-item" data-handle="/collections/{{collection.handle}}" data-hname="/{{collection.handle}}/">{{ collection.title }}</button>
             {% endfor %}
+          </div>
+        </div>
+        <div class="collection__header-right">
+          <div>
+            <select class="sort-desktop" id="SortBy" name="SortBy">
+              <option value="" class="optionClass" disabled="disabled">Sort by</option>
+              {% for option in collection.sort_options %}
+                  <option value="{{ option.value }}" class="optionClass" data-index="{{forloop.index}}" {% if option.value==collection.sort_by %} selected {% endif %}>{{ option.name }}</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
       </div>
     </div>
-    <div class="collection__wrapper">
+    <div class="collection__wrapper-main">
+      <div class="collection__wrapper">
         {% for product in collection.products %}
           <div class="collection__item">
             <!-- Flex -->
@@ -77,10 +86,14 @@
             </div>
           </div>
         {% endfor %}
+        
+
+    </div>
     </div>
   </div>
   
-  <div class="filter__block">
+
+   <div class="filter__block">
    <div class="filter__block-wrapper">
     <div class="filter__header">
       <div class="filter__header-wrapper">
@@ -98,19 +111,37 @@
             <div class="category__status">+</div>
           </div>
          </div>
-         <div class="category__subcategories">
+         <div class="category__subcategories category__subcategories_active">
           {% for tag in tagArray %}
+          {% assign countGoods = 0 %}
           {% assign i = 0 %}
           {% for subCategory in subcategoriesArray %}
+
             {% if i == 0 %}
               {% assign i = 1 %}
               {% continue %}
             {% endif %}
               {% if i == 1 %}
+
                 {% if tag contains subCategory and tag contains category%}
                 <div class="category__subcategories-item">
-                  <input type="radio" name="{{ category }}" id="{{ subCategory | capitalize}}">
-                  <label data-filter="/collections/{{collection.handle}}/{{tag}}" for="{{ subCategory | capitalize}}" class="label-item">{{ subCategory | capitalize}}</label>
+
+                  <!-- Count goods for subcategory and category -->
+                {% for collection in collections %}
+                  {% for product in collection.products %}
+                    {% for tag in product.tags %}
+                      {% if tag contains category and tag contains subCategory %}
+                        {% assign countGoods = countGoods | plus: 1 %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                {% endfor %}
+                
+                  <input type="radio" name="{{ category }}" id="{{ subCategory | capitalize}}-{{category}}" data-subname="{{ subCategory |capitalize}}" class="input-item">
+                  <label data-filter="/collections/{{collection.handle}}/{{tag}}" for="{{ subCategory | capitalize}}-{{category}}" class="label-item">{{ subCategory | capitalize}}</label>
+                 
+                  <div class="category__subcategories-item__count">{{countGoods}}</div>
+
                 </div>
                 {% endif %}
               {% endif %}
@@ -123,7 +154,7 @@
      {% endfor %}
     </div>
    </div>
-  </div>
+  </div> 
 
 </div>
 
