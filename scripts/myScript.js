@@ -456,3 +456,4 @@ document.querySelector('.filter__block').addEventListener('click',function(event
         }, 600);
     }
 })
+
