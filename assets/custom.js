@@ -298,7 +298,11 @@ function reloadContenturl(url) {
                 history.pushState({
                     page: url
                 }, url, url);
-                // labelItemFunction()
+                addContentOnPage();
+
+                var filterClear = document.querySelector('.filter__clear');
+                filterClear.classList.add('filter__clear_show');
+                countProductsOnPage();
             }
         });
     }, 0);
@@ -371,6 +375,9 @@ function reloadFilterAndCollectionContent(url, nameHandle) {
             showCategoryHeaders();
             labelItemFunction();
             hideFilterFunction();
+            addContentOnPage();
+            clearFilter();
+            countProductsOnPage();
         }
     });
 }
@@ -405,6 +412,9 @@ jQuery('#SortBy').val('{{ collection.sort_by | default: collection.default_sort_
             showCategoryHeaders();
             labelItemFunction();
             hideFilterFunction();
+            addContentOnPage();
+            clearFilter();
+            countProductsOnPage();
         }
     });
 });
@@ -445,3 +455,72 @@ document.querySelector('.filter__block').addEventListener('click', function (eve
         }, 600);
     }
 });
+
+// check url and add class collagen
+window.addEventListener('DOMContentLoaded', function () {
+    var url = window.location.pathname;
+    var collectionButtons = document.querySelectorAll('.collection__list-item');
+
+    collectionButtons.forEach(function (item) {
+        if (item.dataset.handle.includes(url)) {
+            item.classList.add('collection__list-item_active');
+        }
+    });
+});
+
+// clear filter
+function clearFilter() {
+    var filterClearButton = document.querySelector('.filter__clear');
+    filterClearButton.addEventListener('click', function () {
+        var inputItems = document.querySelectorAll('.input-item');
+        inputItems.forEach(function (item) {
+            if (item.checked) {
+                item.checked = false;
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: filterClearButton.dataset.handle,
+            data: {},
+            complete: function complete(data) {
+                $('.collection__wrapper').fadeOut('fast');
+                setTimeout(function () {
+                    $('.collection__wrapper').fadeIn();
+                }, 500);
+                $('.filter__block-wrapper').html($('.filter__block-wrapper', data.responseText).html());
+                $('.collection__wrapper').html($('.collection__wrapper', data.responseText).html());
+                history.pushState({
+                    page: filterClearButton.dataset.handle
+                }, filterClearButton.dataset.handle, filterClearButton.dataset.handle);
+                showCategoryHeaders();
+                labelItemFunction();
+                hideFilterFunction();
+                addContentOnPage();
+                clearFilter();
+
+                countProductsOnPage();
+            }
+        });
+    });
+}
+
+clearFilter();
+
+// show clear filter after reload page if at least one radio button checked
+window.addEventListener('DOMContentLoaded', function () {
+    var activeRadioButtons = document.querySelectorAll('.input-item');
+    for (var index = 0; index < activeRadioButtons.length; index++) {
+        if (activeRadioButtons[index].checked === true) {
+            $('.filter__clear').addClass('filter__clear_show');
+            break;
+        }
+    }
+});
+
+// how much displayed products
+function countProductsOnPage() {
+    $('.displayed__localCount').html(document.querySelectorAll('.collection__item').length + ' of');
+}
+
+countProductsOnPage();

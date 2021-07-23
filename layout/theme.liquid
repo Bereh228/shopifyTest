@@ -234,9 +234,8 @@
 <!-- JS scripts -->
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<!-- {{ 'blowup.js' | asset_url | script_tag }} -->
 {{ 'jquery.zoom.js' | asset_url | script_tag }}
-{{ 'custom.js' | asset_url | script_tag }}
-
+<!-- {{ 'custom.min.js' | asset_url | script_tag }} -->
+<script src="{{ 'custom.js' | asset_url }}"></script>
 </body>
 </html>

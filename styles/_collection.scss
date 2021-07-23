@@ -5,9 +5,21 @@
     &__wrapper{
         position: relative;
         display: flex;
-        justify-content: space-between;
+        // justify-content: space-between;
         flex-wrap: wrap;
         min-height: 550px;
+        padding-bottom: 50px;
+        .displayed{
+            position: absolute;
+            top: -72px;
+            right: 204px;
+            display: flex;
+            align-items: center;
+            &__text,
+            &__localCount{
+                margin-right: 3px;
+            }
+        }
         &-main{
             width: 100%;
             min-height: 605px;
@@ -20,10 +32,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
         }
         &-left{
             display: flex;
             align-items: center;
+        }
+        &-right{
+            display: flex;
+            align-items: center;
+
         }
     }
     // filter
@@ -72,7 +90,7 @@
     }
     // item
     &__item{
-        margin-bottom: 10px;
+        margin: 0 75px 10px 0;
     }
 
 
@@ -105,7 +123,7 @@
                     color: #4e4b48;
                 }
             }
-            
+
         }
         &__price{
             font-size: 22px;
@@ -114,7 +132,7 @@
             font-style: italic;
         }
     }
-    
+
     .filter__block{
         display: none;
         width: 100%;
@@ -136,13 +154,21 @@
             height: 100vh;
             background: #F2F2EF;
             overflow-y: scroll;
-            
+
             &_active{
                 transform: translateX(0%);
             }
         }
     }
     .filter{
+        &__clear{
+            padding-top: 15px;
+            cursor: pointer;
+            display: none;
+            &_show{
+                display: block;
+            }
+        }
         &__content-item{
             input{
                 margin-right: 12px;
@@ -163,7 +189,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                
+
             }
             &-arrow{
                 width: 24px;
@@ -185,7 +211,7 @@
             }
         }
     }
-    
+
     // category
     .category{
         &__header{
@@ -203,7 +229,7 @@
             display: none;
             padding-top: 24px;
             &_active{
-                display: block; 
+                display: block;
             }
             &-item{
                 margin-bottom: 24px;
@@ -254,11 +280,11 @@
         &__status{
             font-size: 25px;
             line-height: 1;
-            user-select: none;   
+            user-select: none;
         }
 
     }
-    
+
     .sort-desktop{
         background: transparent;
         border: none;
@@ -281,5 +307,17 @@
             }
         }
     }
-    
+    .js-load-more{
+        margin: 0 auto;
+    }
+    .load-more_wrap{
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        &_hidden{
+            display: none;
+        }
+    }
+
 }

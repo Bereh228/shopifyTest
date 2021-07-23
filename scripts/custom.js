@@ -69,7 +69,7 @@ function showMegaMenu(){
         arrowUpInMenu.classList.toggle('arrow-up_rotate');
         headerMegaMenu.classList.toggle('header__mega_active');
         triangleGrocery.classList.toggle('header__triangle_active');
-    }   
+    }
 }
 
 function showMegaMenuAbout(){
@@ -83,7 +83,7 @@ function showMegaMenuAbout(){
         megaAbout.classList.toggle('header__about-mega_active');
         arrow_about_about.classList.toggle('arrow-up-about_rotate');
         triangleAbout.classList.toggle('header__triangle-about_active');
-    }   
+    }
 }
 
 function showMegaMenuBlog(){
@@ -92,11 +92,11 @@ function showMegaMenuBlog(){
     // check other mega menus
     checkMegaMenu();
     checkAboutMenu();
-    
+
     if(innerWidth > 375){
         megaArticleBlog.classList.toggle('header__article_active');
         arrowBlog.classList.toggle('arrow-up-blog_active');
-    }   
+    }
 }
 
 // mega menu
@@ -199,7 +199,7 @@ function hideFilterFunction(){
     const hideFilters = document.querySelector('.filter__header-exit');
     hideFilters.addEventListener('click',()=>{
         $('.filter__block-wrapper').removeClass('filter__block-wrapper_active');
-    
+
         setTimeout(()=>{
              $('.filter__block').fadeOut('fast');
         },600)
@@ -269,7 +269,7 @@ function reloadContenturl(url){
 
     setTimeout(() => {
         url = '/collections' + objHandle.name;
-        
+
         for (let index = 0; index < arrayLink.length; index++) {
             // console.log(arrayLink[index]);
             if(index >= 0  && index != arrayLink.length - 1) url += arrayLink[index] + '+';
@@ -278,12 +278,12 @@ function reloadContenturl(url){
         }
     }, 0);
 
-    
+
 
     setTimeout(() => {
         $.ajax({
             type: 'GET',
-            url: url, 
+            url: url,
             data: {},
             complete: function(data) {
                 $('.collection__wrapper').fadeOut('fast');
@@ -304,7 +304,12 @@ function reloadContenturl(url){
                 history.pushState({
                     page: url
                 },url,url)
-                // labelItemFunction()
+                addContentOnPage();
+
+                const filterClear = document.querySelector('.filter__clear');
+                filterClear.classList.add('filter__clear_show');
+                countProductsOnPage();
+
             }
         });
     }, 0);
@@ -342,7 +347,7 @@ function reloadFilterAndCollectionContent(url,nameHandle){
 
     $.ajax({
         type: 'GET',
-        url: url, 
+        url: url,
         data: {},
         complete: function(data) {
             $('.collection__wrapper').fadeOut('fast');
@@ -360,8 +365,8 @@ function reloadFilterAndCollectionContent(url,nameHandle){
             })
             // select order by as default
             selectOrderBy();
-            
-            
+
+
 
             history.pushState({
                 page: url
@@ -379,6 +384,10 @@ function reloadFilterAndCollectionContent(url,nameHandle){
             showCategoryHeaders();
             labelItemFunction();
             hideFilterFunction();
+            addContentOnPage();
+            clearFilter();
+            countProductsOnPage();
+
         }
     });
 }
@@ -400,7 +409,7 @@ jQuery('#SortBy')
     let resultUrl = objHandle.url + '?' + jQuery.param(Shopify.queryParams).replace(/\+/g, '%20');
     $.ajax({
         type: 'GET',
-        url: resultUrl, 
+        url: resultUrl,
         data: {},
         complete: function(data) {
             $('.collection__wrapper').fadeOut('fast');
@@ -415,6 +424,10 @@ jQuery('#SortBy')
             showCategoryHeaders();
             labelItemFunction();
             hideFilterFunction();
+            addContentOnPage();
+            clearFilter();
+            countProductsOnPage();
+
         }
     })
   });
@@ -444,7 +457,7 @@ window.addEventListener('DOMContentLoaded',function(){
                 }
             }
         });
-    }     
+    }
 })
 
 // close filter
@@ -457,3 +470,73 @@ document.querySelector('.filter__block').addEventListener('click',function(event
     }
 })
 
+// check url and add class collagen
+window.addEventListener('DOMContentLoaded',function(){
+    const url = window.location.pathname;
+    const collectionButtons = document.querySelectorAll('.collection__list-item');
+
+    collectionButtons.forEach(item => {
+        if(item.dataset.handle.includes(url)){
+            item.classList.add('collection__list-item_active');
+        }
+    });
+
+})
+
+// clear filter
+function clearFilter(){
+    const filterClearButton = document.querySelector('.filter__clear');
+    filterClearButton.addEventListener('click',function(){
+        const inputItems = document.querySelectorAll('.input-item');
+        inputItems.forEach(item => {
+            if(item.checked){
+                item.checked = false;
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: filterClearButton.dataset.handle,
+            data: {},
+            complete: function(data) {
+                $('.collection__wrapper').fadeOut('fast');
+                setTimeout(() => {
+                    $('.collection__wrapper').fadeIn();
+                }, 500);
+                $('.filter__block-wrapper').html( $('.filter__block-wrapper', data.responseText).html());
+                $('.collection__wrapper').html( $('.collection__wrapper', data.responseText).html());
+                history.pushState({
+                    page: filterClearButton.dataset.handle
+                },filterClearButton.dataset.handle,filterClearButton.dataset.handle)
+                showCategoryHeaders();
+                labelItemFunction();
+                hideFilterFunction();
+                addContentOnPage();
+                clearFilter();
+
+                countProductsOnPage();
+            }
+        })
+
+    })
+}
+
+clearFilter();
+
+// show clear filter after reload page if at least one radio button checked
+window.addEventListener('DOMContentLoaded',function(){
+  const activeRadioButtons = document.querySelectorAll('.input-item');
+  for (let index = 0; index < activeRadioButtons.length; index++) {
+    if(activeRadioButtons[index].checked === true){
+        $('.filter__clear').addClass('filter__clear_show');
+        break;
+    }
+  }
+})
+
+// how much displayed products
+function countProductsOnPage(){
+    $('.displayed__localCount').html(document.querySelectorAll('.collection__item').length + ' of');
+}
+
+countProductsOnPage();

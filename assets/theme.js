@@ -9685,3 +9685,77 @@ function removeImageLoadingAnimation(image) {
     imageWrapper.removeAttribute('data-image-loading-animation');
   }
 }
+
+// pagination
+// function buttonLoadMore(){
+//   const buttonLoadMoreNotF = document.querySelector('.js-load-more');
+//   buttonLoadMoreNotF.addEventListener('click',)
+
+// }
+
+function addContentOnPage(){
+
+  $('.js-load-more').on('click', function(){
+    var $this =$(this),
+    totalPages = parseInt($('[data-total-pages]').val()),
+    currentPage = parseInt($('[data-current-page]').val());
+    $this.attr('disabled', true);
+    $this.find('[load-more-text]').addClass('hide');
+    $this.find('[loader]').removeClass('hide');
+    var nextUrl = $('[data-next-url]').val().replace(/page=[0-9]+/,'page='+currentPage);
+    $('[data-current-page]').val(currentPage);
+    $.ajax({
+      url: nextUrl,
+      type: 'GET',
+      dataType: 'html',
+      success: function(responseHTML){
+        $('.collection__wrapper').append($(responseHTML).find('.collection__wrapper').html());
+        history.pushState({
+          page: nextUrl
+      },nextUrl,nextUrl)
+
+      const hiddenBlocks = document.querySelectorAll('.hidden-block');
+      const buttons = document.querySelectorAll('.load-more_wrap');
+      const displayed = document.querySelectorAll('.displayed');
+      // console.log('Hello');
+
+      for (let index = 0; index < hiddenBlocks.length-1; index++) {
+       hiddenBlocks[index].remove();
+      }
+      for (let index = 0; index < buttons.length-1; index++) {
+        buttons[index].remove();
+      }
+      for (let index = 0; index < displayed.length-1; index++) {
+        displayed[index].remove();
+
+      }
+      },
+      complete: function() {
+        addContentOnPage();
+        if(currentPage >= totalPages) {
+           $this.attr('disabled', false);
+           $this.find('[load-more-text]').removeClass('hide');
+           $this.find('[loader]').addClass('hide');
+           const loadMore = document.querySelector('.load-more_wrap');
+           loadMore.classList.add('load-more_wrap_hidden');
+           document.querySelector('.hidden-block').classList.add('hidden-block_hidden');
+        }
+
+        countProductsOnPage();
+      }
+    })
+  });
+}
+
+addContentOnPage();
+
+window.addEventListener('DOMContentLoaded',function(){
+  let totalPages = parseInt($('[data-total-pages]').val());
+  let currentPage = parseInt($('[data-current-page]').val());
+
+  if(currentPage > totalPages) {
+    const loadMore = document.querySelector('.load-more_wrap');
+    loadMore.classList.add('load-more_wrap_hidden');
+ }
+})
+

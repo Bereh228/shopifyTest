@@ -1,7 +1,7 @@
 <!-- SELECT CATEGORIES -->
   {% for product in collection.products %}
     {% for tag in product.tags %}
-      {% assign category = tag | remove: 'category_' | split: ':' %} 
+      {% assign category = tag | remove: 'category_' | split: ':' %}
       {% assign categories = categories | append: category[0] | append: ',' %}
       {% assign categoriesArray = categories | split: ',' | uniq | join: ',' | split: ',' %}
     {% endfor %}
@@ -66,11 +66,21 @@
         </div>
       </div>
     </div>
-    
+
     <div class="collection__wrapper-main">
+
       <div class="collection__wrapper">
-        
-        {% for product in collection.products %}
+        <div class="displayed">
+          {% assign countProducts = 0 %}
+          {% for product in collection.products %}
+            {% assign countProducts = countProducts | plus: 1 %}
+          {% endfor %}
+          <div class="displayed__text">Displayed </div>
+          <div class="displayed__localCount"></div>
+          <div class="displayed__generalCount">{{countProducts}}</div>
+        </div>
+    {% paginate collection.products by section.settings.count_products %}
+    {% for product in collection.products %}
           <div class="collection__item">
             <!-- Flex -->
             <div class="collection__item-wrapper">
@@ -87,20 +97,28 @@
             </div>
           </div>
         {% endfor %}
-         
+
+        {% if paginate.pages > 1 %}
+
+        <div class="hidden-block">
+          <input type="hidden" value="{{ paginate.next.url }}" data-next-url>
+          <input type="hidden" value="{{ paginate.pages }}" data-total-pages>
+         <input type="hidden" value="{{ paginate.current_page | plus: 1 }}" data-current-page>
+        </div>
+         <div class="load-more_wrap">
+           <button class="btn js-load-more">
+             <span load-more-text>Load more</span>
+             <span class="hide" loader>{% include 'icon-spinner' %}</span>
+           </button>
+        </div>
+
+        {% endif %}
     </div>
-    </div>
-    <input type="hidden" value="{{ paginate.next.url }}" data-next-url>
-     	<input type="hidden" value="{{ paginate.pages }}" data-total-pages>
-        <input type="hidden" value="{{ paginate.current_page  }}" data-current-page>
-        <div class="load-more_wrap">
-          <button class="btn js-load-more">
-            <span load-more-text>Load more</span>
-            <span class="hide" loader>{% include 'icon-spinner' %}</span>
-          </but
-    
-  </div>
-  
+
+
+
+  {% endpaginate %}
+
 
    <div class="filter__block">
    <div class="filter__block-wrapper">
@@ -112,12 +130,13 @@
       </div>
     </div>
     <div class="filter__content">
+      <div class="filter__clear" data-handle="/collections/{{ collection.handle }}">Clear filter</div>
      {% for category in categoriesArray %}
        <div class="category">
          <div class="category__header">
           <div class="category__header-wrapper">
             <div class="category__text">{{ category | upcase }}</div>
-            <div class="category__status">+</div>
+            <div class="category__status">-</div>
           </div>
          </div>
          <div class="category__subcategories category__subcategories_active">
@@ -145,11 +164,11 @@
                     {% endfor %}
                   {% endfor %}
                 {% endfor %}
-                
+
                   <input type="radio" name="{{ category }}" id="{{ subCategory | capitalize}}-{{category}}" data-subname="{{ subCategory |capitalize}}" class="input-item">
                   <label data-filter="/collections/{{collection.handle}}/{{tag}}" for="{{ subCategory | capitalize}}-{{category}}" class="label-item">{{ subCategory | capitalize}}</label>
-                 
-                  <div class="category__subcategories-item__count">{{countGoods}}</div>
+
+                  <div class="category__subcategories-item__count">({{countGoods}})</div>
 
                 </div>
                 {% endif %}
@@ -157,13 +176,13 @@
 
             {% endfor %}
           {% endfor %}
-            
+
          </div>
        </div>
      {% endfor %}
     </div>
    </div>
-  </div> 
+  </div>
 
 </div>
 
@@ -172,11 +191,15 @@
 {
   "name": "Settings",
   "settings": [
-    {
-      "type": "image_picker",
-      "id": "filter_image",
-      "label": "Filter image"
-    },
+  {
+    "type": "image_picker",
+    "id": "filter_image",
+    "label": "Filter image"
+  }, {
+    "type": "text",
+    "id": "count_products",
+    "label": "Count products"
+  },
     {
       "type": "text",
       "id": "filter_text",
