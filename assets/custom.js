@@ -156,12 +156,14 @@ var showFilters = document.querySelector('.collection__filter');
 
 // show Filters
 function showFilterFunction() {
-    showFilters.addEventListener('click', function () {
-        $('.filter__block').fadeIn('fast');
-        setTimeout(function () {
-            $('.filter__block-wrapper').addClass('filter__block-wrapper_active');
-        }, 300);
-    });
+    if (showFilters) {
+        showFilters.addEventListener('click', function () {
+            $('.filter__block').fadeIn('fast');
+            setTimeout(function () {
+                $('.filter__block-wrapper').addClass('filter__block-wrapper_active');
+            }, 300);
+        });
+    }
 }
 showFilterFunction();
 // hide Filters
@@ -220,7 +222,7 @@ function showContentJQUERY(data) {
     $('.collection__wrapper').fadeOut('fast');
     setTimeout(function () {
         $('.collection__wrapper').fadeIn();
-    }, 500);
+    }, 350);
     $('.collection__wrapper').html($('.collection__wrapper', data.responseText).html());
 }
 
