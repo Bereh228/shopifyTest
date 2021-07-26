@@ -211,7 +211,7 @@ function labelItemFunction(){
                 optionsValue[index].setAttribute('selected','');
                 break;
             }
-            reloadContenturl(item.dataset.filter)
+            reloadContenturl(item.dataset.filter);
         });
     });
 }
@@ -264,6 +264,7 @@ function reloadContenturl(url){
 
                 document.querySelector('.filter__clear').classList.add('filter__clear_show');
                 countProductsOnPage();
+                buttonReload();
             }
         });
     }, 0);
@@ -319,6 +320,8 @@ function reloadFilterAndCollectionContent(url,nameHandle){
                 }
             });
             reloadFunction();
+            buttonReload();
+            clickArrow();
         }
     });
 }
@@ -349,6 +352,8 @@ jQuery('#SortBy')
                 page: resultUrl
             },resultUrl,resultUrl)
             reloadFunction();
+            buttonReload();
+            clickArrow();
         }
     })
   });
@@ -377,12 +382,14 @@ function clearFilter(){
             url: filterClearButton.dataset.handle,
             data: {},
             complete: function(data) {
-                howContentJQUERY(data);
+                showContentJQUERY(data);
                 $('.filter__block-wrapper').html( $('.filter__block-wrapper', data.responseText).html());
                 history.pushState({
                     page: filterClearButton.dataset.handle
                 },filterClearButton.dataset.handle,filterClearButton.dataset.handle)
                 reloadFunction();
+                buttonReload();
+                clickArrow();
             }
         })
 
@@ -428,3 +435,197 @@ window.addEventListener('DOMContentLoaded',function(){
         }
     }
 })
+
+// reload page
+let Reloaded  = function(newUrl){
+    if(newUrl){
+        let url = window.location.pathname;
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: {},
+            complete: function(data) {
+                showContentJQUERY(data);
+                $('.filter__block-wrapper').html( $('.filter__block-wrapper', data.responseText).html());
+                history.pushState({
+                    page: url
+                },url,url)
+                reloadFunction();
+                buttonReload();
+                clickArrow();
+            }
+        })
+    }
+}
+
+window.onload = function() {
+  let loaded = sessionStorage.getItem('loaded');
+  if(loaded) {
+    let newUrl = false;
+    if(window.location.href.includes('page')) newUrl = true;
+    Reloaded(newUrl);
+  } else {
+    sessionStorage.setItem('loaded', true);
+  }
+}
+
+function buttonReload(){
+    createButtons();
+    clickButton();
+}
+
+function createButtons(){
+    const wrapperButton = document.querySelector('.load-more-wrap-noP');
+    for (let index = 0; index < $('[data-total-pages]').val(); index++) {
+        const button = document.createElement('button');
+        button.classList.add('button__paginate');
+        button.setAttribute('page',index + 1);
+        button.innerHTML = index + 1;
+        wrapperButton.appendChild(button);
+    }
+    let iElem = document.createElement('i');
+    iElem.classList.add('fas');
+    iElem.classList.add('fa-chevron-right');
+    iElem.classList.add('arrow-right-load');
+    if(wrapperButton) wrapperButton.appendChild(iElem);
+
+    const buttons = document.querySelectorAll('.button__paginate');
+
+    for (let index = 0; index < buttons.length; index++) {
+        if(index > 2) buttons[index].classList.add('button__paginate-none');
+    }
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+    if(document.querySelector('.load-more-wrap-noP')){
+        createButtons();
+        clickButton();
+    }
+})
+
+function clickButton(){
+    document.querySelectorAll('.button__paginate').forEach(item => {
+        item.addEventListener('click',function(){
+            let url = window.location.pathname + `?page=${this.getAttribute('page')}`;
+            $.ajax({
+                type:'GET',
+                url: url,
+                data: {},
+                complete: function(data){
+                    showContentJQUERY(data);
+                 history.pushState({
+                     page: url
+                 },url,url)
+                 // buttons
+                 buttonReload();
+                 countProductsOnPage();
+                 // add class
+                 let elementActive;
+                 document.querySelectorAll('.button__paginate').forEach(item=>{
+                     if(window.location.href.substr(-6).includes(item.getAttribute('page'))) {
+                        //  console.log(`Locale: ${}`);
+                        item.classList.add('button__paginate_active');
+                        elementActive = item;
+                     }
+                 })
+
+                document.querySelectorAll('.button__paginate').forEach(item=>{ item.classList.add('button__paginate-none') })
+
+                 if(elementActive.previousElementSibling){
+                     elementActive.previousElementSibling.classList.remove('button__paginate-none');
+                     elementActive.classList.remove('button__paginate-none');
+                     if(elementActive.nextElementSibling){
+                         elementActive.nextElementSibling.classList.remove('button__paginate-none');
+                     }
+                 }
+                 else if(elementActive.innerHTML === '1'){
+                     elementActive.classList.remove('button__paginate-none');
+                     elementActive.nextElementSibling.classList.remove('button__paginate-none');
+                     if(elementActive.nextElementSibling.nextElementSibling){
+                         elementActive.nextElementSibling.nextElementSibling.classList.remove('button__paginate-none');
+                     }
+                 }
+                 else{
+                     elementActive.nextElementSibling.classList.remove('button__paginate-none');
+                     elementActive.nextElementSibling.classList.remove('button__paginate-none');
+                 }
+                 clickArrow();
+                }
+            })
+        })
+    });
+}
+
+let objPrevElement = {
+    id:0
+}
+let objPage = {
+    page: 1
+}
+
+function clickArrow(){
+    // console.log('Click function');
+    const arrowRight = document.querySelector('.arrow-right-load');
+    const arrowLeft = document.querySelector('.arrow-left-load');
+    arrowRight.addEventListener('click',function(){
+        const buttonsPagination = document.querySelectorAll('.button__paginate');
+
+        if(objPage.page <= buttonsPagination.length) objPage.page++;
+        else objPage.page = buttonsPagination.length;
+
+        console.log(buttonsPagination.length);
+
+        if(buttonsPagination[buttonsPagination.length - 1].classList.contains('button__paginate-none' ) || objPage.page <= buttonsPagination.length){
+            for (let index = 0; index < buttonsPagination.length; index++) {
+                if(buttonsPagination[index].classList.contains('button__paginate-none') && index>= objPrevElement.id){
+                    objPrevElement.id = index;
+                    buttonsPagination[index].classList.remove('button__paginate-none');
+                    buttonsPagination[index - 3].classList.add('button__paginate-none');
+                    break;
+                }
+            }
+            let url = window.location.pathname + `?page=${objPage.page}`;
+            console.log(url);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {},
+                success: function(data){
+
+                    showContentJQUERY(data);
+                    history.pushState({
+                        page: url
+                    },url,url)
+                    clickButton();
+                    clickArrow();
+
+                    document.querySelectorAll('.button__paginate').forEach(item =>{
+                        item.classList.remove('button__paginate_active');
+                    })
+
+                    document.querySelectorAll('.button__paginate').forEach(item=>{
+                        if(item.getAttribute('page') == objPage.page){
+                            item.classList.add('button__paginate_active');
+                        }
+                    })
+                }
+            })
+        }
+    })
+    arrowLeft.addEventListener('click',function(){
+        const buttonsPagination = document.querySelectorAll('.button__paginate');
+        if(buttonsPagination[0].classList.contains('button__paginate-none')){
+            for (let index = 0; index < buttonsPagination.length; index++) {
+                if((buttonsPagination[index].classList.contains('button__paginate') && index <= objPrevElement.id) && !buttonsPagination[index].classList.contains('button__paginate-none')){
+                    objPrevElement.id = index+1;
+                    buttonsPagination[index - 1].classList.remove('button__paginate-none');
+                    if(buttonsPagination[index + 2]) buttonsPagination[index + 2].classList.add('button__paginate-none');
+                    break;
+                }
+            }
+        }
+    })
+
+}
+
+window.addEventListener('DOMContentLoaded',clickArrow);

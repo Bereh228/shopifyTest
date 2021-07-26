@@ -105,12 +105,20 @@
           <input type="hidden" value="{{ paginate.pages }}" data-total-pages>
          <input type="hidden" value="{{ paginate.current_page | plus: 1 }}" data-current-page>
         </div>
-         <div class="load-more_wrap">
-           <button class="btn js-load-more">
-             <span load-more-text>Load more</span>
-             <span class="hide" loader>{% include 'icon-spinner' %}</span>
-           </button>
+        {% if section.settings.button_pagination %}
+          <div class="load-more_wrap">
+            <button class="btn js-load-more">
+              <span load-more-text>Load more</span>
+              <span class="hide" loader>{% include 'icon-spinner' %}</span>
+            </button>
         </div>
+        {% else %}
+          <div class="load-more-wrap-noP">
+            <i class="fas fa-chevron-left arrow-left-load"></i>
+          </div>
+        {% endif %}
+
+
 
         {% endif %}
     </div>
@@ -209,6 +217,12 @@
       "type": "image_picker",
       "id": "arrow_left",
       "label": "Arrow left"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_pagination",
+      "label": "Show button like pagination",
+      "default": true
     }
   ]
 }

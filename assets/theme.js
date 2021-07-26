@@ -9755,7 +9755,8 @@ window.addEventListener('DOMContentLoaded',function(){
 
   if(currentPage > totalPages) {
     const loadMore = document.querySelector('.load-more_wrap');
-    loadMore.classList.add('load-more_wrap_hidden');
+    if(loadMore) loadMore.classList.add('load-more_wrap_hidden');
+
  }
 })
 

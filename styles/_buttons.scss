@@ -1,0 +1,27 @@
+.button{
+    &__paginate{
+        background: $white;
+        border: 1px solid $black;
+        border-radius: 5px;
+        text-transform: uppercase;
+        outline: none;
+        margin-right: 15px;
+        padding: 0.5em 1em;
+        color: $black;
+        user-select: none;
+        &_active{
+            background: #3a3a3a;
+            color: $white;
+        }
+        &:last-child{
+            margin-right: 0;
+        }
+        &:focus{
+            outline: none;
+        }
+        &-none{
+            display: none;
+        }
+    }
+
+}
